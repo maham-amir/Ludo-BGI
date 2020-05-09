@@ -2,6 +2,7 @@
 #include<iostream>
 #include<vector>
 using namespace std;
+
 #pragma once
 #include"Position.h"
 class Piece;
