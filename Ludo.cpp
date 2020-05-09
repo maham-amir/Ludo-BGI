@@ -33,14 +33,14 @@ void Ludo::SelectPiece()
 }
 bool Ludo::IsValidSelection()
 {
-	if (Boxes[S.boxnum]->Pieces.size() == 0)
+	if (Boxes[S.boxnum]->PiecesHere.size() == 0)
 		return false;
 
-	int nop = Boxes[S.boxnum]->Pieces.size();
+	int nop = Boxes[S.boxnum]->PiecesHere.size();
 
 	for (int i = 0; i < nop; i++)
 	{
-		if (Boxes[S.boxnum]->Pieces[i]->color == Players[Plyturn]->color)
+		if (Boxes[S.boxnum]->PiecesHere[i]->color == Players[Plyturn]->color)
 			return true;
 	}
 
@@ -52,7 +52,7 @@ bool Ludo::IsValidDestination()
 
 bool Ludo::IsVacantSpot()
 {
-	if (Boxes[E.boxnum]->Pieces.size() == 0)
+	if (Boxes[E.boxnum]->PiecesHere.size() == 0)
 		return true;
 	else
 		return false;

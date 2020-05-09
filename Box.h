@@ -1,16 +1,14 @@
-#include"Piece.h"
-#include "Position.h"
+//#include"Piece.h"
 #include<iostream>
+#include<vector>
 using namespace std;
-//
-//class Piece;
-//class Position;
-
 #pragma once
+#include"Position.h"
+class Piece;
 class Box
 {
 	Position position;
-	vector<Piece*> Pieces;
+	vector <Piece*> PiecesHere;
 
 public:
 	Box();
