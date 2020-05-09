@@ -24,7 +24,7 @@ public:
   void setVersion(int);
 	void ChangeTurn();
 	void PrintTurnMsg();
-	void Rolldice();
+	int Rolldice();
 	void SelectPiece();
 	bool IsValidSelection();
 	bool IsValidDestination();

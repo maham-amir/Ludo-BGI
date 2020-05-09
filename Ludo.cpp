@@ -21,11 +21,11 @@ void Ludo::PrintTurnMsg()
 {
 	cout << "Player " << Players[Plyturn] << " Turn";
 }
-void Ludo::Rolldice()
+int Ludo::Rolldice()
 {
 	int D;
 	D = (rand() % 6);
-	DiceRolls.push_back (D + 1);
+	return D;
 }
 void Ludo::SelectPiece()
 {

@@ -17,7 +17,7 @@ public:
 	Piece();
 	Piece(int, COLOUR);
 	void bringOut();
-	virtual void draw(); //used to print at position
-	virtual void undraw(); // undraws at position
+	void draw(); //used to print at position
+	void undraw(); // undraws at position
 };
 

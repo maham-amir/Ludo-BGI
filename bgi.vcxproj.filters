@@ -54,10 +54,13 @@
     <ClCompile Include="Piece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Piece1.cpp">
+    <ClCompile Include="Ludo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ludo.cpp">
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,10 +86,13 @@
     <ClInclude Include="Piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Piece1.h">
+    <ClInclude Include="Ludo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ludo.h">
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
