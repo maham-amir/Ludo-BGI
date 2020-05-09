@@ -1,5 +1,9 @@
 #include<iostream>
 #include<vector>
+#include "graphics.h"
+#include <math.h>
+#include <stdlib.h>        // Provides exit
+#include <ctype.h>         // Provides toupper
 #include "Position.h"
 using namespace std;
 class Piece;
@@ -8,6 +12,7 @@ class Box;
 #include"Box.h"
 #include"Piece.h"
 #include"Player.h"
+#include "Grid.h"
 #pragma once
 class Ludo
 {
@@ -19,7 +24,9 @@ class Ludo
 	vector<Position>Stops;
 	vector<Box*>Boxes;
 	Position S, E;
+	Grid grid;
 public:
+	Ludo();
 	int getVersion();
   void setVersion(int);
 	void ChangeTurn();

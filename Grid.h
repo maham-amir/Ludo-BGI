@@ -42,6 +42,9 @@ public:
 	int BoxNumberOfHome(int Home_Number, int row, int col);
 	bool IsBox(int row, int col);
 	Grid(int NumberofHomes  ,int Window_Rows=1000 , int Window_Cols=1000 , int* ColorArray= nullptr , int Boxesdefault_Color=15);
+	Grid()
+	{
+	}
 	~Grid();
 };
 

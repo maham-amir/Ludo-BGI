@@ -2,6 +2,24 @@
 #include "Piece.h"
 #include "Player.h"
 #include"Box.h"
+
+enum MyColor {
+	Black = 0, Blue = 1, Green = 2, Cyan = 3, Red = 4, Magenta = 5, Brown = 6, LightGay = 7, DarkGray = 8,
+	LitBlue = 9, LitGreen = 10, LitCyan = 11, LitRed = 12, LitMagenta = 13, Yellow = 14, White = 15
+};
+
+Ludo::Ludo()
+{
+	//
+	//	/*int CA[] = { Magenta, LitMagenta, White, Red, LitRed, White, Green, LitGreen, White, Cyan, LitCyan, White };
+	//	Grid Ludo(4, Max_Rows, Max_Cols, CA, 0);*/
+	//light mode
+
+	int CA[] = { LitBlue,Blue,  Black,  LitRed, Red,Black, LitGreen, Green, Black, Yellow, Brown, Black };
+	grid = Grid(4, 800, 1000, CA, 15);
+	//dark mode
+}
+
 int Ludo::getVersion()
 {
 	return Ver;
@@ -103,6 +121,8 @@ void Ludo::AddWinnerToList(Player* Won)
 
 void Ludo::play()
 {
+	initwindow(1000, 800, "Ludo");
+	grid.PrintGrid();
 	int NOP; 
 	cin >> NOP;
 	init(NOP);
