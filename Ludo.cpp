@@ -152,10 +152,22 @@ bool Ludo::iskill()
 }
 void Ludo::init(int NOP)
 {
-	//player start positions needed
-	for (int i = 0; i < NOP; i++)
+
+	COLOUR c[] = { blue,red,green,yellow,purple,orange };
+	int pos[] = { 9,22,35,48,61,74};
+
+	if (NOP != 2)
+		for (int i = 0; i < NOP; i++)
+		{
+			Player* ptr = new Player(c[i], pos[i]);
+			Players.push_back(ptr);
+		}
+	else if (NOP == 2)
 	{
-		Players.push_back(&Player());
+		Player* ptr = new Player(c[0], pos[0]);
+		Players.push_back(ptr);
+		Player* ptr2 = new Player(c[2], pos[2]);
+		Players.push_back(ptr2);
 	}
 
 }
