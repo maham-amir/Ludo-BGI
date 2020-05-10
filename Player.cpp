@@ -4,11 +4,12 @@ Player::Player()
 {
 }
 
-Player::Player(COLOUR c, Position sp, Ludo l):color(c), startPos(sp)
+Player::Player(COLOUR c, Position sp):color(c), startPos(sp)
 {
 	for (int i = 0; i < 4; i++)
 	{
-		Pieces.push_back(&Piece(sp.boxnum, c));
+		Piece* p = new Piece(sp.boxnum, c);
+		Pieces.push_back(p);
 	}
 }
 

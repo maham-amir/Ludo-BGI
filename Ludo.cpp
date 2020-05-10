@@ -9,7 +9,6 @@ enum MyColor {
 	Black = 0, Blue = 1, Green = 2, Cyan = 3, Red = 4, Magenta = 5, Brown = 6, LightGay = 7, DarkGray = 8,
 	LitBlue = 9, LitGreen = 10, LitCyan = 11, LitRed = 12, LitMagenta = 13, Yellow = 14, White = 15
 };
-
 void Ludo::drawPiece(int boxnum)
 {
 	int x;
@@ -20,16 +19,16 @@ void Ludo::drawPiece(int boxnum)
 	switch (Plyturn+1)
 	{
 	case 1:
-		c = Red;
+		c = Blue;
 		break;
 	case 2:
-		c = Green;
+		c = Red;
 		break;
 	case 3:
-		c = Brown;
+		c = Green;
 		break;
 	case 4:
-		c = Blue;
+		c = Brown;
 		break;
 	}
 	setcolor(c);
@@ -153,15 +152,17 @@ bool Ludo::iskill()
 void Ludo::init(int NOP)
 {
 
-	COLOUR c[] = { blue,red,green,yellow,purple,orange };
-	int pos[] = { 9,22,35,48,61,74};
+	COLOUR c[] = { blue,red,green,brown,purple,orange };
+	int pos[] = { 9,22,35,48, 61,74 };
 
 	if (NOP != 2)
+	{
 		for (int i = 0; i < NOP; i++)
 		{
 			Player* ptr = new Player(c[i], pos[i]);
 			Players.push_back(ptr);
 		}
+	}
 	else if (NOP == 2)
 	{
 		Player* ptr = new Player(c[0], pos[0]);

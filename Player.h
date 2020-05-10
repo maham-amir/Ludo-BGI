@@ -15,7 +15,7 @@ class Player
 public:
 	friend class Ludo;
 	Player();
-	Player(COLOUR, Position, Ludo);
+	Player(COLOUR, Position);
 	void removePiece(int);
 
 };
