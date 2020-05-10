@@ -9,7 +9,6 @@ protected:
 	bool hasHomed;
 	bool isOut;
 	bool isSafe;
-	
 
 public:
 	COLOUR color;

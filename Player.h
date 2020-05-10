@@ -5,7 +5,6 @@
 using namespace std;
 
 
-
 #pragma once
 class Player
 {
@@ -16,7 +15,7 @@ class Player
 public:
 	friend class Ludo;
 	Player();
-	Player(COLOUR, Position);
+	Player(COLOUR, Position, Ludo);
 	void removePiece(int);
 
 };

@@ -37,11 +37,10 @@ public:
 	bool IsValidDestination();
 	bool IsVacantSpot();
 	void RemovePlayer();
-  	//code by BSCS19065
-
+  	
 	Piece* getSelectedPiece(int);
 	void play();
-
+	void storeDiceRoll(int);
 	bool iskill();
 	void init(int);
 	void Update();
@@ -49,5 +48,7 @@ public:
 	void UnHighlight();
 	void DisplayBoard();
 	void AddWinnerToList(Player*);
-	// end code by BSCS19065
+	void getAllDiceRolls();
+	void drawPiece(int);
+	void undrawPiece(int);
 };

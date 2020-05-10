@@ -27,7 +27,8 @@ public:
 	void PrintBox( int Box_number,  char,int FillColor = -1, int BoundryColor = 15);              //print single box only     // it relates from very first home               
 	int B_B_C;           // Box_BackGround Colors or boundry line color
 	  
-	
+	void Redraw(int Box_number);
+
 	void PrintBoxArray(int Home_Number ,int Row_number ,int Box_color =1, int Boundry_color=15);                // print Any Row of boxes with desired color if passed
 	
 	void PrintAllHomeBoxes(int Home_Number, int Fillcolor = -1, int Boundry_color = 15 , int Middle_rowcolor=-1);   // Print All Boxes of a home with
