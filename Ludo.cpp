@@ -171,6 +171,12 @@ void Ludo::init(int NOP)
 		Players.push_back(ptr2);
 	}
 
+	for (int bi = 0; bi < 53; bi++)
+	{
+		Box* b = new Box(bi + 1);
+		Boxes.push_back(b);
+	}
+
 }
 void Ludo::Update()
 {
@@ -210,6 +216,11 @@ void Ludo::play()
 		PrintTurnMsg();
 
 		getAllDiceRolls();
+
+		cout << "\nDice rolls: ";
+		for (int i = 0; i < DiceRolls.size(); i++)
+			cout << DiceRolls[i] << " ";
+
 
 		int c = 0;
 		do
