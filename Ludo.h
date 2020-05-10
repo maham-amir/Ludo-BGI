@@ -34,16 +34,16 @@ public:
 	int Rolldice();
 	void SelectPiece();
 	bool IsValidSelection();
-	bool IsValidDestination();
-	bool IsVacantSpot();
+	bool IsValidDestination(int);
+	bool IsVacantSpot(Position);
 	void RemovePlayer();
-  	
+	void move();
 	Piece* getSelectedPiece(int);
 	void play();
 	void storeDiceRoll(int);
 	bool iskill();
 	void init(int);
-	void Update();
+	void Update(Piece*);
 	void Highlight();
 	void UnHighlight();
 	void DisplayBoard();

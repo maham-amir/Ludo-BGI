@@ -13,7 +13,7 @@ void Ludo::drawPiece(int boxnum)
 {
 	int x;
 	int y;
-	grid.GetBoxCenter(boxnum, y, x);
+	grid.GetBoxCenter(boxnum, x, y);
 
 	MyColor c;
 	switch (Plyturn+1)
@@ -105,9 +105,11 @@ bool Ludo::IsValidSelection()
 	}
 
 }
-bool Ludo::IsValidDestination()
+bool Ludo::IsValidDestination(int c)
 {
-	return true;
+	if(E.boxnum - S.boxnum == DiceRolls[c] - 1)
+		return true;	
+	return false;
 }
 
 void Ludo::getAllDiceRolls()
@@ -129,9 +131,9 @@ void Ludo::getAllDiceRolls()
 	} while (n == 6);
 }
 
-bool Ludo::IsVacantSpot()
+bool Ludo::IsVacantSpot(Position p)
 {
-	if (Boxes[E.boxnum]->PiecesHere.size() == 0)
+	if (Boxes[p.boxnum]->PiecesHere.size() == 0)
 		return true;
 	else
 		return false;
@@ -142,7 +144,17 @@ void Ludo::RemovePlayer()
 }
 Piece* Ludo::getSelectedPiece(int bn)
 {
-	return Players[Plyturn]->Pieces[0];
+	for (int i = 0; i < 4; i++)
+	{
+		if (Players[Plyturn]->color == Boxes[bn]->PiecesHere[i]->color)
+			return Boxes[bn]->PiecesHere[i];
+	}
+	return nullptr;
+}
+
+void Ludo::move()
+{
+	
 }
 
 bool Ludo::iskill()
@@ -173,14 +185,28 @@ void Ludo::init(int NOP)
 
 	for (int bi = 0; bi < 53; bi++)
 	{
-		Box* b = new Box(bi + 1);
+		Box* b = new Box(bi);
 		Boxes.push_back(b);
+		for (int i = 0; i < NOP; i++)
+		{
+			if(pos[i] == bi)
+				Boxes[bi]->PiecesHere.push_back(Players[i]->Pieces[0]);
+		}
 	}
 
 }
-void Ludo::Update()
+void Ludo::Update(Piece* p)
 {
+	Boxes[E.boxnum]->PiecesHere.push_back(p);
+	
+	int c = 0;
+	while (Boxes[S.boxnum]->PiecesHere[c] != p)
+		c++;
 
+	Boxes[S.boxnum]->PiecesHere.erase(Boxes[S.boxnum]->PiecesHere.begin() + c);
+	
+	undrawPiece(S.boxnum);
+	drawPiece(E.boxnum);
 }
 void Ludo::Highlight()
 {
@@ -208,9 +234,10 @@ void Ludo::play()
 	cout << "Enter no. of Players: ";
 	cin >> NOP;
 	init(NOP);
-
+	int x, y;
 	DisplayBoard();
 	Plyturn = 0;
+	Ver = NOP;
 	do
 	{
 		PrintTurnMsg();
@@ -221,6 +248,7 @@ void Ludo::play()
 		for (int i = 0; i < DiceRolls.size(); i++)
 			cout << DiceRolls[i] << " ";
 
+		Piece* currPiece;
 
 		int c = 0;
 		do
@@ -228,23 +256,40 @@ void Ludo::play()
 			int bn;
 			do
 			{
-
-				//get box number
+				clearmouseclick(WM_LBUTTONDOWN);
+				do
+				{
+				} while (!ismouseclick(WM_LBUTTONDOWN));
+				getmouseclick(WM_LBUTTONDOWN, y, x);
+				if (grid.IsBox(x, y))
+				{
+					S.boxnum = grid.BoxNumber(x, y); 
+				}
 			} while (!IsValidSelection());
+
+			currPiece = getSelectedPiece(S.boxnum);
 
 			Highlight();
 
 
 			do
 			{
-				int boxnum;
-				cin >> boxnum;
-			} while (IsValidDestination());
-
+				do
+				{
+				} while (!ismouseclick(WM_LBUTTONDOWN));
+				getmouseclick(WM_LBUTTONDOWN, y, x);
+				if (grid.IsBox(x, y))
+				{
+					E.boxnum = grid.BoxNumber(x, y);
+				}
+			} while (IsValidDestination(c));
+			
 			UnHighlight();
-			Update();
+			Update(currPiece);
 			c++;
 		} while (c < DiceRolls.size());
+
+		DiceRolls.clear();
 		
 		if (Players[Plyturn]->Pieces.size() == 0)
 		{
