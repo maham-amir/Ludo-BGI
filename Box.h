@@ -10,9 +10,10 @@ class Box
 {
 	Position position;
 	vector <Piece*> PiecesHere;
+	bool isSafeSpot;
 
 public:
-	Box(int);
+	Box(int,bool);
 	friend class Ludo;
 };
 
