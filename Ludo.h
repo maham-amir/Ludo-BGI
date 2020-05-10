@@ -34,20 +34,21 @@ public:
 	int Rolldice();
 	void SelectPiece();
 	bool IsValidSelection();
-	bool IsValidDestination();
-	bool IsVacantSpot();
+	bool IsValidDestination(int);
+	bool IsVacantSpot(Position);
 	void RemovePlayer();
-  	//code by BSCS19065
-
+	void move();
 	Piece* getSelectedPiece(int);
 	void play();
-
+	void storeDiceRoll(int);
 	bool iskill();
 	void init(int);
-	void Update();
+	void Update(Piece*);
 	void Highlight();
 	void UnHighlight();
 	void DisplayBoard();
 	void AddWinnerToList(Player*);
-	// end code by BSCS19065
+	void getAllDiceRolls();
+	void drawPiece(int);
+	void undrawPiece(int);
 };

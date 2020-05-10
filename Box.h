@@ -12,7 +12,7 @@ class Box
 	vector <Piece*> PiecesHere;
 
 public:
-	Box();
+	Box(int);
 	friend class Ludo;
 };
 

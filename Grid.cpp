@@ -24,6 +24,14 @@ Grid::Grid(int NOHs, int Window_Rows, int Window_Cols , int* CA , int B_G_C)
 	//	}
 	//}
 }
+void Grid::Redraw(int Box_number)
+{
+	int Bn = (Box_number % 13) ? Box_number % 13 : 13;
+	int Hn = Box_number / 13 + 1;
+	int Fllclr = HomeColors[(Hn - 1) * 3 + 2];
+	if (Bn == 4 || Bn == 9)Fllclr = HomeColors[(Hn - 1) * 3];
+	PrintBox(Bn, Hn, Fllclr, B_B_C);
+}
 void NumtoRow(int &B_N);
 void PrintBoxNormal(int r_c, int c_c, int Size, int fillcolor = 0, int BoundryColor = 15)
 {

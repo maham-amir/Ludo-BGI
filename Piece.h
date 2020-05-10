@@ -1,5 +1,5 @@
 #include"Position.h"
-enum COLOUR { red, yellow, green, blue, orange, purple };
+static enum COLOUR { red, green,brown, blue, orange, purple };
 #pragma once
 class Piece
 {
@@ -9,7 +9,6 @@ protected:
 	bool hasHomed;
 	bool isOut;
 	bool isSafe;
-	
 
 public:
 	COLOUR color;
