@@ -41,7 +41,7 @@ public:
 	Piece* getSelectedPiece(int);
 	void play();
 	void storeDiceRoll(int);
-	bool iskill(Box);
+	bool iskill(Box*);
 	void init(int);
 	void Update(Piece*);
 	void Highlight();

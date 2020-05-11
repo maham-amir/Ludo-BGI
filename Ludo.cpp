@@ -157,12 +157,12 @@ void Ludo::move()
 	
 }
 
-bool Ludo::iskill(Box ep)
+bool Ludo::iskill(Box* ep)
 {
-	if (ep.isSafeSpot == true) return false;
-	else if (!ep.PiecesHere.empty()) return false;
+	if (ep->isSafeSpot == true) return false;
+	else if (!ep->PiecesHere.empty()) return false;
 	for (int pc = 0; pc < 4; pc++)
-		if (ep.position.boxnum == Players[Plyturn]->Pieces[pc]->position.boxnum) return false;
+		if (ep->position.boxnum == Players[Plyturn]->Pieces[pc]->position.boxnum) return false;
 
 
 	return true;
