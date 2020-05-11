@@ -157,13 +157,19 @@ void Ludo::move()
 	
 }
 
-bool Ludo::iskill()
+bool Ludo::iskill(Box ep)
 {
-	return false;
+	if (ep.isSafeSpot == true) return false;
+	else if (!ep.PiecesHere.empty()) return false;
+	for (int pc = 0; pc < 4; pc++)
+		if (ep.position.boxnum == Players[Plyturn]->Pieces[pc]->position.boxnum) return false;
+
+
+	return true;
 }
 void Ludo::init(int NOP)
 {
-
+	int NOB=0; // For Boxes initialization.
 	COLOUR c[] = { blue,red,green,brown,purple,orange };
 	int pos[] = { 9,22,35,48, 61,74 };
 
@@ -173,6 +179,7 @@ void Ludo::init(int NOP)
 		{
 			Player* ptr = new Player(c[i], pos[i]);
 			Players.push_back(ptr);
+			NOB = 13 * NOP;
 		}
 	}
 	else if (NOP == 2)
@@ -181,11 +188,16 @@ void Ludo::init(int NOP)
 		Players.push_back(ptr);
 		Player* ptr2 = new Player(c[2], pos[2]);
 		Players.push_back(ptr2);
+		NOB = 13 * 4;
 	}
-
-	for (int bi = 0; bi < 53; bi++)
+	// Safe Box Positions: 4 9 17 22 30 35 43 48 56 61 69 74
+	for (int bi = 0; bi < NOB; bi++)
 	{
-		Box* b = new Box(bi);
+		bool isSafe = false;
+		if (bi == 4 || bi == 9 || bi == 17 || bi == 22 || bi == 30 || bi == 35 || bi == 43
+			|| bi == 48 || bi == 56 || bi == 61 || bi == 69 || bi == 74) isSafe = true;
+
+		Box* b = new Box(bi,isSafe);
 		Boxes.push_back(b);
 		for (int i = 0; i < NOP; i++)
 		{
