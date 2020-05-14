@@ -42,7 +42,20 @@ void Ludo::drawPiece(int boxnum)
 
 void Ludo::undrawPiece(int boxnum)
 {
-	grid.Redraw(boxnum);
+	int t = Plyturn;
+	grid.Redraw(boxnum); bool drawn = false;
+
+	for (int i = 0; i < Boxes[boxnum - 1]->PiecesHere.size(); i++)
+	{
+		drawn = false;
+		for (int j = 0; j < Ver && drawn == false; j++)
+		{
+			Plyturn = j;
+			if (Players[Plyturn]->color == Boxes[boxnum - 1]->PiecesHere[i]->color)
+				drawPiece(Boxes[boxnum - 1]->PiecesHere[i]->position.boxnum), drawn = true;
+		}
+	}
+	Plyturn = t;
 }
 
 Ludo::Ludo()
@@ -53,6 +66,7 @@ Ludo::Ludo()
 	//light mode
 
 	int CA[] = { LitBlue,Blue,  Black,  LitRed, Red,Black, LitGreen, Green, Black, Yellow, Brown, Black };
+	
 	grid = Grid(4, 800, 1000, CA, 15);
 	//dark mode
 }
@@ -93,42 +107,60 @@ void Ludo::SelectPiece()
 }
 bool Ludo::IsValidSelection()
 {
-	if (Boxes[S.boxnum]->PiecesHere.size() == 0)
+	if (Boxes[S.boxnum-1]->PiecesHere.size() == 0)
 		return false;
 
-	int nop = Boxes[S.boxnum]->PiecesHere.size();
+	int nop = Boxes[S.boxnum-1]->PiecesHere.size();
 
 	for (int i = 0; i < nop; i++)
 	{
-		if (Boxes[S.boxnum]->PiecesHere[i]->color == Players[Plyturn]->color)
+		if (Boxes[S.boxnum-1]->PiecesHere[i]->color == Players[Plyturn]->color)
 			return true;
 	}
 
+	return false;
 }
 bool Ludo::IsValidDestination(int c)
 {
-	if(E.boxnum - S.boxnum == DiceRolls[c] - 1)
-		return true;	
+	int jump = S.boxnum + DiceRolls[c];  // 48 + 6 = 54
+
+	if (jump > grid.NumberOfHmes * 13) // 54 > 52 == true
+	{
+		jump = jump - grid.NumberOfHmes * 13; // jump = 54 - 52 = 2
+		if (grid.NumberOfHmes * 13 - S.boxnum + jump == DiceRolls[c]) // 52 - 48 +  2 = 6
+			return true;
+	}
+
+	if (E.boxnum - S.boxnum == DiceRolls[c]) // 52 - 48 +  2 = 6
+		return true;
 	return false;
 }
 
 void Ludo::getAllDiceRolls()
 {
-	int n = 0;
+	int n = 6; int x, y;
 	do
 	{
-		char c;
-		if (n == 6)
-			cout << "\nRoll again...! ";
-		cout << "\nEnter D to roll dice: ";
-		cin >> c;
-		if (c == 'd')
+		do
 		{
-			n = Rolldice();
-			cout << "\nDice : " << n << "\n";
-			storeDiceRoll(n);
-		}
+			clearmouseclick(WM_LBUTTONDOWN);
+			do
+			{
+			} while (!ismouseclick(WM_LBUTTONDOWN));
+			getmouseclick(WM_LBUTTONDOWN, y, x);
+		} while (!(isDiceClicked(x, y)));
+		
+	
+		grid.Dice(6, 450, 1000, 40, 0);
+		grid.Dice(5, 450, 1000, 40, 0);
+		
+		n = Rolldice();
+		cout << "\nDice : " << n << "\n";
+		storeDiceRoll(n);
+
+		grid.Dice(n, 450, 1000, 40, 15);
 	} while (n == 6);
+
 }
 
 bool Ludo::IsVacantSpot(Position p)
@@ -146,8 +178,8 @@ Piece* Ludo::getSelectedPiece(int bn)
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (Players[Plyturn]->color == Boxes[bn]->PiecesHere[i]->color)
-			return Boxes[bn]->PiecesHere[i];
+		if (Players[Plyturn]->color == Boxes[bn - 1]->PiecesHere[i]->color)
+			return Boxes[bn - 1]->PiecesHere[i];
 	}
 	return nullptr;
 }
@@ -156,21 +188,47 @@ void Ludo::move()
 {
 	
 }
-
-bool Ludo::iskill(Box ep)
+bool Ludo::isDiceClicked(int row, int col)
 {
-	if (ep.isSafeSpot == true) return false;
-	else if (!ep.PiecesHere.empty()) return false;
-	for (int pc = 0; pc < 4; pc++)
-		if (ep.position.boxnum == Players[Plyturn]->Pieces[pc]->position.boxnum) return false;
+	if ((col >= 960 && col <= 1040) && (row >= 410 && row <= 490))
+		return true;
+	return false;
+}
+bool Ludo::iskill(Box* ep)
+{
+	if (ep->isSafeSpot == true) return false;
 
+	else if ((ep->PiecesHere.empty())) return false;
+	//same colored piece
+	for (int pc = 0; pc < 4; pc++)
+		if (ep->position.boxnum == Players[Plyturn]->Pieces[pc]->position.boxnum) return false;
 
 	return true;
+}
+void Ludo::kill()
+{
+	//curr box -> remove 
+	//start box -> add
+
+	Piece* t = Boxes[E.boxnum - 1]->PiecesHere[0];
+	COLOUR c = Boxes[E.boxnum - 1]->PiecesHere[0]->color;
+
+	Boxes[E.boxnum - 1]->PiecesHere.erase(Boxes[E.boxnum - 1]->PiecesHere.begin());
+
+	int ci;
+	for (int i = 0; i < Ver; i++)
+	{
+		if (Players[i]->color == c)
+			ci = i;
+	}
+	t->position = Players[ci]->startPos.boxnum;
+	Boxes[Players[ci]->startPos.boxnum - 1]->PiecesHere.push_back(t);
+
 }
 void Ludo::init(int NOP)
 {
 	int NOB=0; // For Boxes initialization.
-	COLOUR c[] = { blue,red,green,brown,purple,orange };
+	COLOUR c[] = { blue,red,green,brown, cyan, magenta};
 	int pos[] = { 9,22,35,48, 61,74 };
 
 	if (NOP != 2)
@@ -179,7 +237,7 @@ void Ludo::init(int NOP)
 		{
 			Player* ptr = new Player(c[i], pos[i]);
 			Players.push_back(ptr);
-			NOB = 13 * NOP;
+			NOB = 13 * grid.NumberOfHmes + 5 * grid.NumberOfHmes;
 		}
 	}
 	else if (NOP == 2)
@@ -188,50 +246,45 @@ void Ludo::init(int NOP)
 		Players.push_back(ptr);
 		Player* ptr2 = new Player(c[2], pos[2]);
 		Players.push_back(ptr2);
-		NOB = 13 * 4;
+
+		NOB = 13 * grid.NumberOfHmes + 5*grid.NumberOfHmes;
 	}
 	// Safe Box Positions: 4 9 17 22 30 35 43 48 56 61 69 74
 	for (int bi = 0; bi < NOB; bi++)
 	{
 		bool isSafe = false;
-		if (bi == 4 || bi == 9 || bi == 17 || bi == 22 || bi == 30 || bi == 35 || bi == 43
-			|| bi == 48 || bi == 56 || bi == 61 || bi == 69 || bi == 74) isSafe = true;
+		if (bi == 3 || bi == 8 || bi == 16 || bi == 21 || bi == 29 || bi == 34 || bi == 42
+			|| bi == 47 || bi == 55 || bi == 60 || bi == 68 || bi == 73 || bi > 13*grid.NumberOfHmes - 1)
+			isSafe = true;
 
-		Box* b = new Box(bi,isSafe);
+		Box* b = new Box(bi + 1,isSafe);
 		Boxes.push_back(b);
 		for (int i = 0; i < NOP; i++)
 		{
-			if(pos[i] == bi)
-				Boxes[bi]->PiecesHere.push_back(Players[i]->Pieces[0]);
+			if (pos[i] == bi + 1)
+			{
+				for(int j = 0; j < 4; j++)
+					Boxes[bi]->PiecesHere.push_back(Players[i]->Pieces[j]);
+			}
 		}
 	}
 
 }
 void Ludo::Update(Piece* p)
 {
-	Boxes[E.boxnum]->PiecesHere.push_back(p);
-	
+	Boxes[E.boxnum - 1]->PiecesHere.push_back(p);
+	Boxes[E.boxnum - 1]->PiecesHere[Boxes[E.boxnum - 1]->PiecesHere.size() - 1]->position = E.boxnum;
+
 	int c = 0;
-	while (Boxes[S.boxnum]->PiecesHere[c] != p)
+	while (Boxes[S.boxnum - 1]->PiecesHere[c] != p)
 		c++;
 
-	Boxes[S.boxnum]->PiecesHere.erase(Boxes[S.boxnum]->PiecesHere.begin() + c);
+	Boxes[S.boxnum - 1]->PiecesHere.erase(Boxes[S.boxnum - 1]->PiecesHere.begin() + c);
 	
 	undrawPiece(S.boxnum);
 	drawPiece(E.boxnum);
 }
-void Ludo::Highlight()
-{
 
-}
-void Ludo::UnHighlight()
-{
-
-}
-void Ludo::DisplayBoard()
-{
-
-}
 void Ludo::AddWinnerToList(Player* Won)
 {
 	PlayersWon.push_back(Won);	
@@ -239,17 +292,22 @@ void Ludo::AddWinnerToList(Player* Won)
 
 void Ludo::play()
 {
-	initwindow(1000, 800, "Ludo");
+	initwindow(1200, 800, "Ludo");
+	
 	grid.PrintGrid();
 	srand(time(0));
 	int NOP; 
+	
 	cout << "Enter no. of Players: ";
 	cin >> NOP;
+	
 	init(NOP);
 	int x, y;
-	DisplayBoard();
+
 	Plyturn = 0;
 	Ver = NOP;
+
+	grid.Dice(6, 450, 1000, 40, 15);
 	do
 	{
 		PrintTurnMsg();
@@ -259,6 +317,8 @@ void Ludo::play()
 		cout << "\nDice rolls: ";
 		for (int i = 0; i < DiceRolls.size(); i++)
 			cout << DiceRolls[i] << " ";
+
+		
 
 		Piece* currPiece;
 
@@ -281,11 +341,9 @@ void Ludo::play()
 
 			currPiece = getSelectedPiece(S.boxnum);
 
-			Highlight();
-
-
 			do
 			{
+				clearmouseclick(WM_LBUTTONDOWN);
 				do
 				{
 				} while (!ismouseclick(WM_LBUTTONDOWN));
@@ -294,11 +352,19 @@ void Ludo::play()
 				{
 					E.boxnum = grid.BoxNumber(x, y);
 				}
-			} while (IsValidDestination(c));
+			} while (!IsValidDestination(c));
 			
-			UnHighlight();
+
+			if (iskill(Boxes[E.boxnum - 1]))
+			{
+				kill();
+				currPiece->hasKilled = true;
+			}
+
 			Update(currPiece);
+
 			c++;
+
 		} while (c < DiceRolls.size());
 
 		DiceRolls.clear();

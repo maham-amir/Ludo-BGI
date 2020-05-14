@@ -28,7 +28,8 @@ class Ludo
 public:
 	Ludo();
 	int getVersion();
-  void setVersion(int);
+	void setVersion(int);
+	 void kill();
 	void ChangeTurn();
 	void PrintTurnMsg();
 	int Rolldice();
@@ -41,12 +42,10 @@ public:
 	Piece* getSelectedPiece(int);
 	void play();
 	void storeDiceRoll(int);
-	bool iskill(Box);
+	bool iskill(Box*);
 	void init(int);
+	bool isDiceClicked(int, int);
 	void Update(Piece*);
-	void Highlight();
-	void UnHighlight();
-	void DisplayBoard();
 	void AddWinnerToList(Player*);
 	void getAllDiceRolls();
 	void drawPiece(int);

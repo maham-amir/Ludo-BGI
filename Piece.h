@@ -1,5 +1,5 @@
 #include"Position.h"
-static enum COLOUR { red, green,brown, blue, orange, purple };
+static enum COLOUR { red, green,brown, blue, cyan, magenta };
 #pragma once
 class Piece
 {
