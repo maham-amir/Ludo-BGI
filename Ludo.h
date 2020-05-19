@@ -24,18 +24,24 @@ class Ludo
 	vector<Position>Stops;
 	vector<Box*>Boxes;
 	Position S, E;
+	Piece* currPiece;
 	Grid grid;
+
+	vector<int>DiceSumIndexes;
+	void CalcValidSumindexes(int Sum);
+	int SumOfDiceBinaryIndexs(bool* bptr, int B_size);
 public:
 	Ludo();
 	int getVersion();
 	void setVersion(int);
-	 void kill();
+	void kill();
 	void ChangeTurn();
 	void PrintTurnMsg();
 	int Rolldice();
 	void SelectPiece();
 	bool IsValidSelection();
 	bool IsValidDestination(int);
+	bool CanMov(Piece*, int B_E);
 	bool IsVacantSpot(Position);
 	void RemovePlayer();
 	void move();
@@ -45,6 +51,7 @@ public:
 	bool iskill(Box*);
 	void init(int);
 	bool isDiceClicked(int, int);
+	bool IsWin(int);
 	void Update(Piece*);
 	void AddWinnerToList(Player*);
 	void getAllDiceRolls();
