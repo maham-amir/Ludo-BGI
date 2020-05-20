@@ -17,14 +17,14 @@ Grid::Grid(int NOHs, int Window_Rows, int Window_Cols, int* CA, int B_G_C)
 	}
 }
 void NumtoRow(int& B_N);
-void RotateCircle(int R_C, int C_C, int Radius,  int color)
+void RotateCircle(int R_C, int C_C, int Radius, int color)
 {
 	setcolor(color);
 	setfillstyle(SOLID_FILL, color);
 	circle(C_C, R_C, Radius);
 	floodfill(C_C, R_C, color);
 }
-void Grid::Dice(int Num, int R_C, int C_C,int Size, int color)
+void Grid::Dice(int Num, int R_C, int C_C, int Size, int color)
 {
 	int width = Size;
 	int height = Size;
@@ -43,25 +43,25 @@ void Grid::Dice(int Num, int R_C, int C_C,int Size, int color)
 		break;
 
 	case 3:
-		RotateCircle(R_C - (height / 2)*.8, C_C - (width / 2)*.8, 5, color);   // t_left	
+		RotateCircle(R_C - (height / 2) * .8, C_C - (width / 2) * .8, 5, color);   // t_left	
 		RotateCircle(R_C, C_C, 5, color);
-		RotateCircle(R_C + (height / 2)*.8, C_C + (width / 2)*.8, 5,color);  //b_right
+		RotateCircle(R_C + (height / 2) * .8, C_C + (width / 2) * .8, 5, color);  //b_right
 		break;
 	case 5:
-		RotateCircle(R_C - (height / 2)*.8, C_C - (width / 2)*.8, 5,color);   // t_left	
-		RotateCircle(R_C - (height / 2)*.8, C_C + (width / 2)*.8, 5, color);   //t_right
-		RotateCircle(R_C + (height / 2)*.8, C_C - (width / 2)*.8, 5, color);  //b_left
-		RotateCircle(R_C + (height / 2)*.8, C_C + (width / 2)*.8, 5, color);  //b_right
+		RotateCircle(R_C - (height / 2) * .8, C_C - (width / 2) * .8, 5, color);   // t_left	
+		RotateCircle(R_C - (height / 2) * .8, C_C + (width / 2) * .8, 5, color);   //t_right
+		RotateCircle(R_C + (height / 2) * .8, C_C - (width / 2) * .8, 5, color);  //b_left
+		RotateCircle(R_C + (height / 2) * .8, C_C + (width / 2) * .8, 5, color);  //b_right
 		RotateCircle(R_C, C_C, 5, color);
 		break;
 	case 6:
 		RotateCircle(R_C, C_C + (width / 2) * .8, 5, color);
 		RotateCircle(R_C, C_C - (width / 2) * .8, 5, color);
 	case 4:
-		RotateCircle(R_C - (height / 2)*.8, C_C - (width / 2)*.8, 5, color);   // t_left	
-		RotateCircle(R_C - (height / 2)*.8, C_C + (width / 2)*.8, 5, color);   //t_right
-		RotateCircle(R_C + (height / 2)*.8, C_C - (width / 2)*.8, 5, color);  //b_left
-		RotateCircle(R_C + (height / 2)*.8, C_C + (width / 2)*.8, 5, color);  //b_right
+		RotateCircle(R_C - (height / 2) * .8, C_C - (width / 2) * .8, 5, color);   // t_left	
+		RotateCircle(R_C - (height / 2) * .8, C_C + (width / 2) * .8, 5, color);   //t_right
+		RotateCircle(R_C + (height / 2) * .8, C_C - (width / 2) * .8, 5, color);  //b_left
+		RotateCircle(R_C + (height / 2) * .8, C_C + (width / 2) * .8, 5, color);  //b_right
 		break;
 
 	default:
@@ -154,7 +154,7 @@ void Grid::Redraw(int Box_number)
 void Grid::PrintAllHomeBoxes(int Home_Number, int Fillcolor, int Boundry_color, int Middle_rowcolor)
 {
 	//	int ci = 0, ri = 0;
-	PrintFourHome(Home_Number);
+//	PrintFourHome(Home_Number);
 	if (Fillcolor == -1)Fillcolor = HomeColors[(Home_Number - 1) * 3 + 2];
 	if (Middle_rowcolor == -1)Middle_rowcolor = HomeColors[(Home_Number - 1) * 3];
 	/*if (Boundry_color == -1)*/ Boundry_color = B_B_C;
@@ -229,37 +229,51 @@ namespace MyClass
 }
 void Grid::PrintFourHome(int Home_number)
 {
-	int Right = (Home_number == 2 || Home_number == 3) ? -1 : 1; int Down = (Home_number == 3 || Home_number == 4) ? -1 : 1;
-	PrintBoxNormal(row_center + Down * 9 * m_Box_Size, col_center + Right * 9 * m_Box_Size, m_Box_Size * 6, HomeColors[(Home_number - 1) * 3 + 0], HomeColors[(Home_number - 1) * 3 + 0]);
-	PrintBoxNormal(row_center + Down * 9 * m_Box_Size, col_center + Right * 9 * m_Box_Size, m_Box_Size * 4, HomeColors[(Home_number - 1) * 3 + 1], HomeColors[(Home_number - 1) * 3 + 1]);
-	MyClass::FourCilcles(row_center + Down * 9 * m_Box_Size, col_center + Right * 9 * m_Box_Size, 2 * m_Box_Size, m_Box_Size, HomeColors[(Home_number - 1) * 3 + 2],
+	//	int Right = (Home_number == 2 || Home_number == 3) ? -1 : 1; int Down = (Home_number == 3 || Home_number == 4) ? -1 : 1;
+	//	PrintBoxNormal(row_center + Down * 9 * m_Box_Size, col_center + Right * 9 * m_Box_Size, m_Box_Size * 6, HomeColors[(Home_number - 1) * 3 + 0], HomeColors[(Home_number - 1) * 3 + 0]);
+	//	PrintBoxNormal(row_center + Down * 9 * m_Box_Size, col_center + Right * 9 * m_Box_Size, m_Box_Size * 4, HomeColors[(Home_number - 1) * 3 + 1], HomeColors[(Home_number - 1) * 3 + 1]);
+	//	MyClass::FourCilcles(row_center + Down * 9 * m_Box_Size, col_center + Right * 9 * m_Box_Size , 2 * m_Box_Size, m_Box_Size, HomeColors[(Home_number - 1) * 3 + 2],
+	//		HomeColors[(Home_number - 1) * 3 + 2]);
+
+	int H_row_c = 0, H_col_c = 0;
+	GetBoxCenterOnHome(0, Home_number, H_row_c, H_col_c);
+	PrintBoxNormal(H_row_c, H_col_c, m_Box_Size * 6, HomeColors[(Home_number - 1) * 3 + 0], HomeColors[(Home_number - 1) * 3 + 0]);
+	PrintBoxNormal(H_row_c, H_col_c, m_Box_Size * 4, HomeColors[(Home_number - 1) * 3 + 1], HomeColors[(Home_number - 1) * 3 + 1]);
+	MyClass::FourCilcles(H_row_c, H_col_c, 2 * m_Box_Size, m_Box_Size, HomeColors[(Home_number - 1) * 3 + 2],
 		HomeColors[(Home_number - 1) * 3 + 2]);
+
+
+
 
 
 }
 void Grid::PrintGrid()
 {
 	//	if (Home_number == 1)
-	MyClass::PrintBoxWithDiagal(row_center, col_center, 3 * m_Box_Size, HomeColors[(0) * 3], HomeColors[(1) * 3], HomeColors[(2) * 3], HomeColors[(3) * 3]);
 
 	if (NumberOfHmes == 4)
 	{
+		MyClass::PrintBoxWithDiagal(row_center, col_center, 3 * m_Box_Size, HomeColors[(0) * 3], HomeColors[(1) * 3], HomeColors[(2) * 3], HomeColors[(3) * 3]); // Arrow
+		PrintFourHome(1);
 		PrintAllHomeBoxes(1);
+		PrintFourHome(2);
 		PrintAllHomeBoxes(2);
+		PrintFourHome(3);
 		PrintAllHomeBoxes(3);
+		PrintFourHome(4);
 		PrintAllHomeBoxes(4);
 	}
 }
 
-void Grid::GetBoxCenter(int Box_Number, int &Center_row, int& Center_col)
+void Grid::GetBoxCenter(int Box_Number, int& Center_row, int& Center_col)
 {
 	//     if (Box_Number < 14) GetBoxCenter(Box_Number, 1, Center_row, Center_col);	   
 	//else if (Box_Number < 27) { Box_Number -= 13;   GetBoxCenter(Box_Number, 2, Center_row, Center_col); }
 	//else if (Box_Number < 40) { Box_Number -= 26;   GetBoxCenter(Box_Number, 3, Center_row, Center_col); }
 	//else if (Box_Number < 53) { Box_Number -= 39;   GetBoxCenter(Box_Number, 4, Center_row, Center_col); }
-	if (Box_Number <= (NumberOfHmes * 13)) GetBoxCenter((Box_Number-1)%13 +1, ((Box_Number-1)/13)+1, Center_row, Center_col);
-	else if (Box_Number <= (NumberOfHmes * 13 + 5)) GetBoxCenter(Box_Number -13*NumberOfHmes+13, 1, Center_row, Center_col);
-	else if (Box_Number <= (NumberOfHmes * 13 + 10))GetBoxCenter(Box_Number - 13 * NumberOfHmes + 13-5, 2, Center_row, Center_col);
+	if (Box_Number <= (NumberOfHmes * 13)) GetBoxCenter((Box_Number - 1) % 13 + 1, ((Box_Number - 1) / 13) + 1, Center_row, Center_col);
+	else if (Box_Number <= (NumberOfHmes * 13 + 5)) GetBoxCenter(Box_Number - 13 * NumberOfHmes + 13, 1, Center_row, Center_col);
+	else if (Box_Number <= (NumberOfHmes * 13 + 10))GetBoxCenter(Box_Number - 13 * NumberOfHmes + 13 - 5, 2, Center_row, Center_col);
 	else if (Box_Number <= (NumberOfHmes * 13 + 15))GetBoxCenter(Box_Number - 13 * NumberOfHmes + 13 - 10, 3, Center_row, Center_col);
 	else if (Box_Number <= (NumberOfHmes * 13 + 20))GetBoxCenter(Box_Number - 13 * NumberOfHmes + 13 - 15, 4, Center_row, Center_col);
 }
@@ -342,6 +356,20 @@ int Grid::HomeRowtoNum(int row, int col)
 	//}
 	return -1;
 }
+void Grid::PrintHomeColor(int R_C, int C_C, int HomeNumber, int Size, bool IsInner, int b)
+{
+	int c = HomeColors[3 * (HomeNumber - 1) + IsInner];
+	setcolor(c);
+	setfillstyle(SOLID_FILL, c);
+	rectangle(C_C - Size, R_C - Size, C_C + Size, R_C + Size);
+	floodfill(C_C, R_C, c);
+
+	//	c = HomeColors[3 * (HomeNumber - 1) + !IsInner];
+	//	setcolor(c);
+	//	setfillstyle(SOLID_FILL, c);
+	//	rectangle(C_C - Size+b, R_C - Size+b, C_C + Size-b, R_C + Size-b);
+	//	floodfill(C_C, R_C, c);
+}
 void Grid::GetBoxCenter(int Box_Number, int Home_number, int& Center_row, int& Center_col)            // Box Number with refrence to any home
 {
 	if ((NumberOfHmes == 4))
@@ -390,6 +418,23 @@ void Grid::GetBoxCenter(int Box_Number, int Home_number, int& Center_row, int& C
 	}
 
 }
+void Grid::GetBoxCenterOnHome(int Box_Number, int Home_number, int& Center_row, int& Center_col)
+{
+	if (NumberOfHmes == 4)
+	{
+		if (Box_Number >= 0)
+		{
+			int Right = (Home_number == 2 || Home_number == 3) ? -1 : 1; int Down = (Home_number == 3 || Home_number == 4) ? -1 : 1;
+			Center_row = row_center + Down * 9 * m_Box_Size;
+			Center_col = col_center + Right * 9 * m_Box_Size;
+		}
+		if (Box_Number == 1) Center_col += 2 * m_Box_Size;
+		else if (Box_Number == 2) Center_row += 2 * m_Box_Size;
+		else if (Box_Number == 3) Center_col -= 2 * m_Box_Size;
+		else if (Box_Number == 4) Center_row -= 2 * m_Box_Size;
+	}
+	//PrintFourHome()
+}
 int Grid::GetSize()
 {
 	return m_Box_Size;
@@ -413,7 +458,17 @@ bool Grid::IsBox(int row, int col)
 		}
 	}
 	return 0;
-
+}
+bool Grid::IsCenterBox(int row, int col)
+{
+	if (NumberOfHmes == 4)
+	{
+		if (row <= (row_center + m_Box_Size * 3) && row >= (row_center - m_Box_Size * 3) &&
+			col <= (col_center + m_Box_Size * 3) && col >= (col_center - m_Box_Size * 3)
+			)
+			return true;
+	}
+	return false;
 }
 int Grid::Box_Row(int Angle, int row)
 {

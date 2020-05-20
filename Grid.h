@@ -30,14 +30,17 @@ public:
 	//	void PrintBox( int Box_number, int FillColor = -1, int BoundryColor = 15);              //print single box only     // it relates from very first home               
 	void PrintBox(int Box_number, int Home_Number, int FillColor = -1, int Boundry = 15);    //print single box only     // it relates from box number of any home within 
 	void PrintAllHomeBoxes(int Home_Number, int Fillcolor = -1, int Boundry_color = 15, int Middle_rowcolor = -1);   // Print All Boxes of a home with
-																												  // different middle row color if required
+	void PrintHomeColor(int R_C, int C_C, int HomeNumber, int Size, bool IsInner, int boundry = 5);																											  // different middle row color if required
 	void PrintGrid();          // Print Whole or Grid Full Screen
 	void PrintFourHome(int Home_number);
 	void GetBoxCenter(int Box_Number, int& Center_row, int& Center_col);
 	void GetBoxCenter(int Box_Number, int Home_number, int& Center_row, int& Center_col);            // Box Number with refrence to any home
+	void GetBoxCenterOnHome(int Box_Number, int Home_number, int& Center_row, int& Center_col);
 	int BoxNumber(int row, int col);
+
 	int GetSize();
 	bool IsBox(int row, int col);
+	bool IsCenterBox(int row, int col);
 	void PrintDiece(int Turn, int value, int Size);
 	Grid(int NumberofHomes, int Window_Rows = 1000, int Window_Cols = 1000, int* ColorArray = nullptr, int Boxesdefault_Color = 15);
 	~Grid();

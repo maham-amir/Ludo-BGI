@@ -48,13 +48,16 @@ public:
 	Piece* getSelectedPiece(int);
 	void play();
 	void storeDiceRoll(int);
-	bool iskill(Box*);
+	bool iskill();
 	void init(int);
 	bool isDiceClicked(int, int);
 	bool IsWin(int);
 	void Update(Piece*);
+	void Highlight();
+	void UnHighlight();
+	void DisplayBoard();
 	void AddWinnerToList(Player*);
 	void getAllDiceRolls();
-	void drawPiece(int);
+	void drawPiece(int, bool IsOut = true, int p_num = 1, bool Isinnercolor = 0);
 	void undrawPiece(int);
 };
