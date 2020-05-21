@@ -44,7 +44,8 @@ public:
 	bool CanMov(Piece*, int B_E);
 	bool IsVacantSpot(Position);
 	void RemovePlayer();
-	void move();
+	void cheatButton();
+	bool isCheatClicked(int, int);
 	Piece* getSelectedPiece(int);
 	void play();
 	void storeDiceRoll(int);
