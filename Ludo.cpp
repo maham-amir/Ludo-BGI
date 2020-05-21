@@ -17,22 +17,6 @@ void Ludo::drawPiece(int boxnum, bool IsOut, int p_num, bool Isinnercolor)
 		grid.GetBoxCenter(boxnum, x, y);
 	else
 		grid.GetBoxCenterOnHome(p_num, Plyturn + 1, x, y);
-	//	MyColor c;
-	//	switch (Plyturn+1)
-	//	{
-	//	case 1:
-	//		c = Blue;
-	//		break;
-	//	case 2:
-	//		c = Red;
-	//		break;
-	//	case 3:
-	//		c = Green;
-	//		break;
-	//	case 4:
-	//		c = Brown;
-	//		break;
-	//	}
 
 	int c = grid.HomeColors[Plyturn * 3 + !Isinnercolor];
 	setcolor(c);
@@ -90,7 +74,7 @@ void Ludo::setVersion(int v)
 }
 void Ludo::ChangeTurn()
 {
-	if (Plyturn < Ver - 1)
+	if (Plyturn < Players.size() - 1)
 		Plyturn++;
 	else
 		Plyturn = 0;
@@ -149,10 +133,7 @@ int NumberAt(int Num, int Vs[], int size)
 	}
 	return -1;
 }
-//bool IsValidSum(int Vs[] , int V_Sum, int Adds)
-//{
-//
-//}
+
 void BinaryCounter(bool* Bptr, int size)
 {
 	int i = 0;
@@ -235,29 +216,14 @@ bool Ludo::CanMov(Piece* Pce, int B_E)
 }
 bool Ludo::IsValidDestination(int c)
 {
-	//int jump= S.boxnum + DiceRolls[c];  // 48 + 6 = 54
-
-	//if (jump > grid.NumberOfHmes * 13) // 54 > 52 == true
-	//{
-	//	jump = jump - grid.NumberOfHmes * 13; // jump = 54 - 52 = 2
-	//	if (grid.NumberOfHmes * 13 - S.boxnum + jump == DiceRolls[c]) // 52 - 48 +  2 = 6
-	//		return true;
-	//}
-	//
-	//if (E.boxnum - S.boxnum == DiceRolls[c]) // 52 - 48 +  2 = 6
-	//	return true;
-
 	if (!currPiece->isOut)
 	{
 		if (NumberAt(6, &DiceRolls[0], DiceRolls.size()) != -1)
 		{
 			if (S.boxnum == E.boxnum)
 			{
-				//				DiceRolls.erase(DiceRolls.begin() + NumberAt(6, &DiceRolls[0], DiceRolls.size()));   c--;
 				return true;
 			}
-			//			DiceRolls.erase(DiceRolls.begin() + NumberAt(6, &DiceRolls[0], DiceRolls.size()));   c--;
-			//			currPiece->bringOut();
 		}
 		else return false;
 	}
@@ -295,38 +261,64 @@ bool Ludo::IsValidDestination(int c)
 
 void Ludo::getAllDiceRolls()
 {
-	int n = 6; int x, y;
+	int n = 6; int x, y; bool dice = false, cheat = false;
 	string DR;
-	//DR ; DR += ' ';
-	//outtextxy(1000, 500, &DR[0]);
-//	grid.Dice(6, 450, 1000, 40, 15);
 	do
+	{
+		clearmouseclick(WM_LBUTTONDOWN);
+		do
+		{
+		} while (!ismouseclick(WM_LBUTTONDOWN));
+		getmouseclick(WM_LBUTTONDOWN, y, x);
+
+		if (isDiceClicked(x, y))
+			dice = true;
+		else if (isCheatClicked(x, y))
+			cheat = true;
+	} while (!cheat && !dice);
+
+	//if cheat clicked then cheat dice rolls
+	if (cheat)
+	{
+		cout << "\nEnter dice rolls :";
+		int ni;
+		do
+		{
+			cin >> ni;
+			DiceRolls.push_back(ni);
+		} while (ni == 6);
+	}
+	//if dice clicked then get dice rolls from dice
+	else
 	{
 		do
 		{
-			clearmouseclick(WM_LBUTTONDOWN);
-			do
+
+			grid.Dice(6, 450, 1000, 40, 0);
+			grid.Dice(5, 450, 1000, 40, 0);
+
+			n = Rolldice();
+			storeDiceRoll(n);
+			DR += n + 48; DR += ' ';
+			outtextxy(1000, 500, &DR[0]);
+			cout << "\nDice : " << n << "\n";
+
+			grid.Dice(n, 450, 1000, 40, 15);
+
+			if (n == 6)
 			{
-			} while (!ismouseclick(WM_LBUTTONDOWN));
-			getmouseclick(WM_LBUTTONDOWN, y, x);
-		} while (!(isDiceClicked(x, y)));
+				do
+				{
+					clearmouseclick(WM_LBUTTONDOWN);
+					do
+					{
+					} while (!ismouseclick(WM_LBUTTONDOWN));
+					getmouseclick(WM_LBUTTONDOWN, y, x);
+				} while (!(isDiceClicked(x, y)));
+			}
 
-
-		grid.Dice(6, 450, 1000, 40, 0);
-		grid.Dice(5, 450, 1000, 40, 0);
-
-		n = Rolldice();
-		storeDiceRoll(n);
-		DR += n + 48; DR += ' ';
-		outtextxy(1000, 500, &DR[0]);
-		cout << "\nDice : " << n << "\n";
-
-
-
-
-		grid.Dice(n, 450, 1000, 40, 15);
-	} while (n == 6);
-
+		} while (n == 6);
+	}
 }
 
 bool Ludo::IsVacantSpot(Position p)
@@ -350,34 +342,42 @@ Piece* Ludo::getSelectedPiece(int bn)
 	return nullptr;
 }
 
-void Ludo::move()
-{
-
-}
 bool Ludo::isDiceClicked(int row, int col)
 {
 	if ((col >= 960 && col <= 1040) && (row >= 410 && row <= 490))
 		return true;
 	return false;
 }
+void Ludo::cheatButton()
+{
+	setcolor(1);
+	setfillstyle(SOLID_FILL, 4);
+	
+	rectangle(1000 - 50, 200- 40, 1000 + 50, 200 + 40);
+	floodfill(1000, 200, 1);
+
+	setbkcolor(4);
+	setcolor(15);
+	outtextxy(1000 - 30, 200 - 8, "C H E A T");
+	setbkcolor(0);
+
+}
+bool Ludo::isCheatClicked(int row, int col)
+{
+	if ((col >= 1000-50 && col <= 1000+50) && (row >= 200-40 && row <= 200+40))
+		return true;
+	return false;
+}
 bool Ludo::iskill()
 {
-	/*if (IsVacantSpot(ep->position))
-		return false;*/
-		//	if (E.boxnum<S.boxnum) 
 	if (Boxes[E.boxnum - 1]->isSafeSpot == true) return false;
 
 	else if ((Boxes[E.boxnum - 1]->PiecesHere.empty())) return false;
 	if (Boxes[E.boxnum - 1]->PiecesHere.size() > 1)       return false;
 	return (Boxes[E.boxnum - 1]->PiecesHere[0]->color != Players[Plyturn]->color);
-
-
 }
 void Ludo::kill()
 {
-	//curr box -> remove 
-	//start box -> add
-
 	Piece* t = Boxes[E.boxnum - 1]->PiecesHere[0];
 	COLOUR c = Boxes[E.boxnum - 1]->PiecesHere[0]->color;
 
@@ -525,6 +525,7 @@ void Ludo::play()
 	init(NOP);
 	int x, y;
 	DisplayBoard();
+	cheatButton();
 	Plyturn = 0;
 	Ver = NOP;
 	grid.Dice(6, 450, 1000, 40, 15);
@@ -534,9 +535,6 @@ void Ludo::play()
 
 		grid.PrintHomeColor(400 - 50, 1000, Plyturn + 1, 30, 1);
 
-		//setcolor(Players[Plyturn]->color);
-		//rectangle(1000 - 20, 400 - 20, 1000 + 20, 400 + 20);
-		//setfillstyle(SOLID_FILL, Players[Plyturn]->color);
 		for (int i = 0; i < Players[Plyturn]->Pieces.size(); i++)
 		{
 			int bn = Players[Plyturn]->Pieces[i]->position.boxnum;
@@ -549,15 +547,8 @@ void Ludo::play()
 				drawPiece(bn, 0, i + 1, 1);
 		}
 
-		cout << "\nEnter dice rolls :";
-		int ni;
-		do
-		{
-			cin >> ni;
-			DiceRolls.push_back(ni);
-		} while (ni == 6);
-		int ci = 0;
-
+		getAllDiceRolls();
+	
 		string DR;
 		for (int i = 0; i < DiceRolls.size(); i++)
 		{
@@ -655,4 +646,5 @@ void Ludo::play()
 		ChangeTurn();
 		system("cls");
 	} while (Players.size() > 1);
+	return;
 }
